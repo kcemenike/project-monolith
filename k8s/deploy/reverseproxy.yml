@@ -14,8 +14,10 @@ spec:
       labels:
         app: reverseproxy
     spec:
+      restartPolicy: Always
       containers:
         - name: reverseproxy
+          imagePullPolicy: Always
           image: kcemenike/reverseproxy:latest
           ports:
             - containerPort: 8080
@@ -37,6 +39,5 @@ spec:
   ports:
     - port: 8080
       targetPort: 8080
-      protocol: TCP
   selector:
     service: reverseproxy
