@@ -92,3 +92,17 @@ spec:
       protocol: TCP
   selector:
     service: backend-feed
+
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: hpa-backend-feed
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: backend-feed
+  minReplicas: 1
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 50
