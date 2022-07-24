@@ -79,7 +79,7 @@ kind: Service
 metadata:
   name: backend-user
   labels:
-    service: backend-user
+    app: backend-user
 spec:
   type: ClusterIP
   ports:
@@ -87,4 +87,4 @@ spec:
       targetPort: 8080
       protocol: TCP
   selector:
-    service: backend-user
+    app: backend-user
