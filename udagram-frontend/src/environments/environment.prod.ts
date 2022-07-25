@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   appName: 'Udagram',
   apiHost:
-    'http://localhost:8080/api/v0',
+    'http://host.docker.internal:8080/api/v0',
 };
 
 /*
