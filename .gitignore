@@ -40,4 +40,7 @@ venv/
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# Custom filters
 set_env.sh
+k8s/config/*.yml
