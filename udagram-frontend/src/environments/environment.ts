@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   appName: 'Udagram',
   apiHost:
-    'http://10.111.138.243:8080/api/v0', // replace this with the DNS of the publicreverseproxy
+    'http://publicreverseproxy:8080/api/v0', // replace this with the DNS of the publicreverseproxy
 };
 
 /*
