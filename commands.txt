@@ -1,0 +1,52 @@
+docker-compose -f docker-compose-build.yaml build --parallel
+docker compose up
+
+docker tag reverseproxy kcemenike/reverseproxy
+docker tag udagram-api-user kcemenike/udagram-api-user
+docker tag udagram-api-feed kcemenike/udagram-api-feed
+docker tag udagram-frontend:local kcemenike/udagram-frontend
+
+docker login
+docker push kcemenike/reverseproxy
+docker push kcemenike/udagram-api-user
+docker push kcemenike/udagram-api-feed
+docker push kcemenike/udagram-frontend
+
+# Get contexts
+kubectl config get-contexts
+
+# Create context from contexts list
+kubectl config set-context monolith --cluster=docker-desktop --user=docker-desktop --namespace=monolith
+# cluster = value of cluster from get-contexts
+# user = authinfo from get-contexts
+# namespace is whatever you want
+
+# Set context
+kubectl config use-context my-new-context-name
+
+kubectl apply -f k8s/config/aws-secret.yml
+kubectl apply -f k8s/config/env-secret.yml
+kubectl apply -f k8s/config/env-configmap.yml
+
+
+kubectl apply -f k8s/deploy/backend-feed-deployment.yml
+kubectl apply -f k8s/deploy/backend-user-deployment.yml
+kubectl apply -f k8s/deploy/frontend.yml
+kubectl apply -f k8s/deploy/reverseproxy.yml
+
+kubectl apply -f k8s -R
+kubectl expose deployment frontend --type=LoadBalancer --name=publicfrontend
+kubectl expose deployment reverseproxy --type=LoadBalancer --name=publicreverseproxy
+
+
+kubectl delete namespace {namespace}
+kubectl create namespace {namespace}
+kubectl delete all --all {namespace}
+
+eksctl create cluster -n monolith -r us-east-1 --nodegroup-name nd1 --nodes-min 2 --nodes-max 3 --ssh-access  -v 3
+
+docker build udagram-frontend/. -t kcemenike/udagram-frontend:stable
+docker push kcemenike/udagram-frontend:stable
+kubectl rollout restart deployment frontend
+
+kubectl delete pods -l app=frontend
